@@ -1,6 +1,10 @@
 import numpy as np 
 import pandas as pd 
 import re 
+from numpy import array
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import LSTM
 
 t = open("training_data.txt", "r")
 w = open("word_array_columns.txt", "w")
