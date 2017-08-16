@@ -6,10 +6,10 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
 
-t = open("training_data.txt", "r")
+t = open("data/training_data.txt", "r")
 #w = open("word_array_columns.txt", "w")
 #p = open("pos_array_columns.txt", "w")
-
+main_dictionary = {}
 word2index = {}
 pos2index = {}
 index2word = {}
@@ -45,18 +45,14 @@ for tag in pos_set:
     pos2index[tag] = count
     index2pos[count] = tag
 
-with open("word2index.txt", "w") as file:
-    file.write(str(word2index))
+main_dictionary["word2index"] = word2index
+main_dictionary["pos2index"] = pos2index
+main_dictionary["index2word"] = index2word
+main_dictionary["index2pos"] = index2pos
 
-with open("pos2index.txt", "w") as file:
-    file.write(str(pos2index))
+word_pos_pairs = [list(zip(word_array[x], pos_array[x])) for x in range(len(word_array))]
 
-
-with open("index2word.txt", "w") as file:
-    file.write(str(index2word))
-
-with open("index2pos.txt", "w") as file:
-    file.write(str(index2pos))
+main_dictionary["word_pos_pairs"] = word_pos_pairs
 
 
 t.close()
@@ -70,10 +66,11 @@ pos_array_encoded = [[pos2index.get(w) for w in s] for s in pos_array]
 print("WORD ARRAY ENCODED ", list(word_array_encoded))
 print("POS Array ENCODED ", list(pos_array_encoded))
 """
+main_dictionary["encoded_input"] = word_array_encoded
+main_dictionary["encoded_label"] = pos_array_encoded
 
-with open("encoded_input_size{}.txt".format(len(word_array_encoded)), "w") as file:
-    file.write(str(word_array_encoded))
 
-with open("encoded_label_size{}.txt".format(len(pos_array_encoded)), "w") as file:
-    file.write(str(pos_array_encoded))
+with open("data/main_dictionary_size{}.txt".format(len(pos_array_encoded)), "w") as file:
+    file.write(str(main_dictionary))
+
 
