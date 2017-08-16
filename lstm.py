@@ -2,9 +2,6 @@ import numpy as np
 import pandas as pd 
 import re 
 from numpy import array
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.layers import LSTM
 
 t = open("training_data.txt", "r")
 w = open("word_array_columns.txt", "w")
@@ -30,7 +27,7 @@ for i, line in enumerate(t):
            case.append([0,0,1])
 s = pd.Series(word_array)
 s1 = pd.Series(pos_array)
-print(case)
+
 one_hot_word_array = pd.get_dummies(s)
 one_hot_pos_array = pd.get_dummies(s1)
 w.write("\n".join(one_hot_word_array.columns))
