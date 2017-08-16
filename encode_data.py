@@ -31,6 +31,7 @@ for i, line in enumerate(t):
 
         if word in delimiter:
             word_array.append([])
+            pos_array.append([])
 
 count = 0
 for word in word_set:
