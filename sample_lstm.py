@@ -27,7 +27,7 @@ def are_equal(list_1, list_2):
 	return True
 
 
-with open("data/main_dictionary_size45.txt", "r") as file:
+with open("data/main_dictionary_size388.txt", "r") as file:
     main_dict = eval(file.read())
 
 word_pos_pairs = main_dict["word_pos_pairs"]
@@ -35,11 +35,11 @@ word_array = [[word[0] for word in sentence] for sentence in word_pos_pairs]
 pos_array = [[word[1] for word in sentence] for sentence in word_pos_pairs]
 
 
-x_train = main_dict["encoded_input"][:40].copy()
-y_train = main_dict["encoded_label"][:40].copy()
+x_train = main_dict["encoded_input"][:10000].copy()
+y_train = main_dict["encoded_label"][:10000].copy()
 
-x_test = main_dict["encoded_input"][40:].copy()
-y_test = main_dict["encoded_label"][40:].copy()
+x_test = main_dict["encoded_input"][10000:].copy()
+y_test = main_dict["encoded_label"][10000:].copy()
 
 num_words = len(main_dict["word2index"])
 num_dimension = 2
@@ -99,8 +99,10 @@ model = Model(inputs=[input_layer], outputs=[out])
 
 model.compile(optimizer='adam', loss='msle', metrics=['accuracy'])
 
+print(model.summary())
+
 # train model
-model.fit(x_train, y_train, nb_epoch=20)
+model.fit(x_train, y_train, nb_epoch=5)
 
 result = model.predict(x_test, batch_size=1, verbose=0)
 
