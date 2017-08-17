@@ -6,13 +6,13 @@ from keras.layers import LSTM
 from keras.layers import Input, Dense, merge
 from keras.models import Model
 from keras.layers.wrappers import TimeDistributed
-from keras.layers.merge import Concatenate
 import numpy as np
 
 #olsgaard.dk
 #for testing
 
 def array_to_one_hot(list_given):
+	#print(list_given)
 	max_index = list_given.index(max(list_given))
 	x = np.zeros((len(list_given),))
 	x[max_index] = 1
@@ -35,15 +35,16 @@ word_array = [[word[0] for word in sentence] for sentence in word_pos_pairs]
 pos_array = [[word[1] for word in sentence] for sentence in word_pos_pairs]
 
 
-x_train = main_dict["encoded_input"][:10000].copy()
-y_train = main_dict["encoded_label"][:10000].copy()
+x_train = main_dict["encoded_input"][:300]
+y_train = main_dict["encoded_label"][:300]
 
-x_test = main_dict["encoded_input"][10000:].copy()
-y_test = main_dict["encoded_label"][10000:].copy()
+x_test = main_dict["encoded_input"][300:]
+y_test = main_dict["encoded_label"][300:]
 
 num_words = len(main_dict["word2index"])
 num_dimension = 2
 
+#print("X_TRAIN", x_train[:5])
 
 # get length of the longest sentence:
 seq_length = max([len(s) for s in x_train])
@@ -52,7 +53,7 @@ seq_length = max([len(s) for s in x_train])
 #no_cat = set([ys for sent in y_train for ys in sent])
 no_cat =len(main_dict["pos2index"])
 
-print("XTETS ", x_test)
+#print("XTETS ", x_test)
 
 # pad sequences
 x_train = sequence.pad_sequences(x_train, maxlen=seq_length)
@@ -89,32 +90,31 @@ forward = LSTM(128, return_sequences=True)(emb2)
 # backward LSTM
 backward = LSTM(128, return_sequences=True, go_backwards=True)(emb2)
 
-common = Concatenate(axis=-1)([forward, backward])
+common = merge([forward, backward], mode='concat', concat_axis=-1)
 dense = TimeDistributed(Dense(128, activation='tanh'))(common)
 out = TimeDistributed(Dense(no_targets, activation='softmax'))(dense)
 
 # Initialize model
 
-model = Model(inputs=[input_layer], outputs=[out])
+model = Model(input=[input_layer], output=[out])
 
 model.compile(optimizer='adam', loss='msle', metrics=['accuracy'])
 
 print(model.summary())
 
 # train model
-model.fit(x_train, y_train, nb_epoch=5)
+model.fit(x_train, y_train, nb_epoch=1)
 
 result = model.predict(x_test, batch_size=1, verbose=0)
 
-result = [array_to_one_hot(list(lst)) for lst in result[0]]
+result = [array_to_one_hot(lst.tolist()) for lst in result]
 
 count = 0
 right = 0
 for i in range(len(result)):
 	count += 1
-	if are_equal(result[i],y_test[0][i]):
+	if np.array_equal(result[i],np.array(y_test[i])):
 		right += 1
 
 print("Accuracy = ", right/float(count))
-
 
