@@ -21,7 +21,7 @@ pos_array = [[]]
 case = []
 delimiter = set([".","?","!" ])
 for i, line in enumerate(t):
-    if i < 500:
+    if i < 1200:
         word, pos_tag = line.split()
         word_set.add(word)
         pos_set.add(pos_tag)
