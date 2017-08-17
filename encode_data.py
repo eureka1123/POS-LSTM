@@ -21,7 +21,7 @@ pos_array = [[]]
 case = []
 delimiter = set([".","?","!" ])
 for i, line in enumerate(t):
-    if i < 11000:
+    if i < 40000:
         word, pos_tag = line.split()
         word_set.add(word)
         pos_set.add(pos_tag)
@@ -32,7 +32,10 @@ for i, line in enumerate(t):
         if word in delimiter:
             word_array.append([])
             pos_array.append([])
-
+"""
+with open("data/word_array.txt", "w") as file:
+    file.write("\n".join(list(" ".join(word_array[i])  for i in range(len(word_array)))))
+"""
 count = 0
 for word in word_set:
     count += 1
