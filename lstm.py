@@ -13,9 +13,8 @@ case = []
 for i, line in enumerate(t):
    if i < 475000:
        line_split = line.split()
-       len_split_1 = len(line_split[1])
-       if line_split[1][len_split_1-1].isdigit() and line_split[1][len_split_1-2].isdigit():
-           line_split[1] = line_split[1][0:len_split_1-2]
+       if line_split[1][-1].isdigit() and line_split[1][-2].isdigit():
+           line_split[1] = line_split[1][0:-2]
        line_split[1] = re.sub(r'[^a-zA-Z0-9]','', line_split[1])
        word_array.append(line_split[0].lower())
        pos_array.append(line_split[1])
