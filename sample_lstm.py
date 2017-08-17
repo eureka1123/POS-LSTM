@@ -35,11 +35,11 @@ word_array = [[word[0] for word in sentence] for sentence in word_pos_pairs]
 pos_array = [[word[1] for word in sentence] for sentence in word_pos_pairs]
 
 
-x_train = main_dict["encoded_input"][:300]
-y_train = main_dict["encoded_label"][:300]
+x_train = main_dict["encoded_input"][:20]
+y_train = main_dict["encoded_label"][:20]
 
-x_test = main_dict["encoded_input"][300:]
-y_test = main_dict["encoded_label"][300:]
+x_test = [main_dict["encoded_input"][20]]
+y_test = [main_dict["encoded_label"][20]]
 
 num_words = len(main_dict["word2index"])
 num_dimension = 2
@@ -103,18 +103,27 @@ model.compile(optimizer='adam', loss='msle', metrics=['accuracy'])
 print(model.summary())
 
 # train model
-model.fit(x_train, y_train, nb_epoch=1)
+model.fit(x_train, y_train, nb_epoch=5)
 
 result = model.predict(x_test, batch_size=1, verbose=0)
+
+print("RESULT", result)
 
 result = [array_to_one_hot(lst.tolist()) for lst in result]
 
 count = 0
 right = 0
-for i in range(len(result)):
-	count += 1
-	if np.array_equal(result[i],np.array(y_test[i])):
-		right += 1
 
+#print("Y_test ",np.array(y_test).shape)
+
+#print("RESULT", np.array(result))
+
+for i in range(len(result[0])):
+	count += 1
+	#print("RESULT: ", result[0][i])
+	#print("EXpected: ", y_test[0][i])
+	if np.array_equal(result[0][i],np.array(y_test[0][i])):
+		right += 1
+print(count, right)
 print("Accuracy = ", right/float(count))
 
