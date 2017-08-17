@@ -103,7 +103,7 @@ model.compile(optimizer='adam', loss='msle', metrics=['accuracy'])
 print(model.summary())
 
 # train model
-model.fit(x_train, y_train, nb_epoch=5)
+model.fit(x_train, y_train, nb_epoch=50)
 
 print("XTEST SHAPE", x_test.shape)
 
