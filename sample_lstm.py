@@ -35,11 +35,11 @@ word_array = [[word[0] for word in sentence] for sentence in word_pos_pairs]
 pos_array = [[word[1] for word in sentence] for sentence in word_pos_pairs]
 
 
-x_train = main_dict["encoded_input"][:380]
-y_train = main_dict["encoded_label"][:380]
+x_train = main_dict["encoded_input"][:300]
+y_train = main_dict["encoded_label"][:300]
 
-x_test = [main_dict["encoded_input"][382]]
-y_test = [main_dict["encoded_label"][382]]
+x_test = main_dict["encoded_input"][300:]
+y_test = main_dict["encoded_label"][300:]
 
 num_words = len(main_dict["word2index"])
 num_dimension = 2
@@ -111,7 +111,7 @@ result = model.predict(x_test, batch_size=1, verbose=0)
 
 print("RESULT SHAPE", result.shape) #1,47,167
 
-result = [array_to_one_hot(lst.tolist()) for lst in result[0]]
+result = [[array_to_one_hot(lst.tolist()) for lst in result[i]] for i in range(len(result))]
 
 print("RESULT SHAPE", np.array(result).shape) #47,167
 
@@ -123,10 +123,11 @@ right = 0
 #print("RESULT", np.array(result))
 
 for i in range(len(result)):
+    for j in range(len(result[i])):
 	count += 1
 	#print("RESULT: ", result[0][i])
 	#print("EXpected: ", y_test[0][i])
-	if np.array_equal(result[i],np.array(y_test[0][i])):
+	if np.array_equal(result[i][j],np.array(y_test[i][j])):
 		right += 1
 print(count, right)
 print("Accuracy = ", right/float(count))
