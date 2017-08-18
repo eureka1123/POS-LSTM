@@ -23,7 +23,7 @@ pos2stpos = {'f':'other','m1':'cd','j':'other','npx':'nnp','zz': 'other',"m":"cd
 
 delimiter = set([".","?","!" ])
 for i, line in enumerate(t):
-    if i < 300000:
+    if i < 100000:
         word, pos_tag = line.split()
         word_set.add(word)
 	
@@ -79,7 +79,7 @@ main_dictionary["encoded_input"] = word_array_encoded
 main_dictionary["encoded_label"] = pos_array_encoded
 
 
-with open("data/main_dictionary_size_new_300K_{}.txt".format(len(pos_array_encoded)), "w") as file:
+with open("data/main_dictionary_size_new_100K_{}.txt".format(len(pos_array_encoded)), "w") as file:
     file.write(str(main_dictionary))
 
 
