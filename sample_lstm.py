@@ -27,7 +27,7 @@ def are_equal(list_1, list_2):
 	return True
 
 
-with open("data/main_dictionary_size1503.txt", "r") as file:
+with open("data/main_dictionary_size_new_300K_11493.txt", "r") as file:
     main_dict = eval(file.read())
 
 word_pos_pairs = main_dict["word_pos_pairs"]
@@ -35,11 +35,11 @@ word_array = [[word[0] for word in sentence] for sentence in word_pos_pairs]
 pos_array = [[word[1] for word in sentence] for sentence in word_pos_pairs]
 
 
-x_train = main_dict["encoded_input"][:1200]
-y_train = main_dict["encoded_label"][:1200]
+x_train = main_dict["encoded_input"][:10000]
+y_train = main_dict["encoded_label"][:10000]
 
-x_test = main_dict["encoded_input"][1200:]
-y_test = main_dict["encoded_label"][1200:]
+x_test = main_dict["encoded_input"][10000:]
+y_test = main_dict["encoded_label"][10000:]
 
 num_words = len(main_dict["word2index"])
 num_dimension = 2
@@ -83,7 +83,7 @@ input_layer = Input(shape=(seq_length,), dtype='int32')
 emb = Embedding(input_dim=num_words+1, output_dim = output_dims, 
     input_length=seq_length, mask_zero=True)(input_layer)
 
-emb2 = SpatialDropout1D(.2)(emb)
+emb2 = SpatialDropout1D(.5)(emb)
 
 # forward LSTM
 forward = LSTM(128, return_sequences=True)(emb2)
@@ -103,7 +103,7 @@ model.compile(optimizer='adam', loss='msle', metrics=['accuracy'])
 print(model.summary())
 
 # train model
-model.fit(x_train, y_train, nb_epoch=5)
+model.fit(x_train, y_train, nb_epoch=10)
 
 print("XTEST SHAPE", x_test.shape)
 
